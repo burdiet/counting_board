@@ -1,0 +1,106 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    background: transparent;
+}
+
+body, div{
+	max-width: 99vw;
+	max-height: 100vh;
+	padding: 0px;
+	margin: 0px;
+	text-align: center;
+}
+
+#leftside{
+	width: 49.5%;
+	height: 100vh;
+	display: inline-block;
+	background-color:  #C1403D;
+	text-align: center;
+}
+
+
+#rightside{
+	width: 49.5%;
+	height: 100vh;
+	display: inline-block;
+	background-color: #0294A5;
+	text-align: center;
+}
+
+#box{
+	width:80%;
+	height:35vh;
+	text-align: center;
+	vertical-align: middle;
+	display: inline-block;
+}
+
+.boardbox{
+	font-family: Microsoft JhengHei;
+	background-color : #A79493;
+	max-width: inherit;
+	max-height: inherit;
+	font-size:12vw;
+	color: white;
+	border-radius: 10px;
+	opacity: 0.9;
+}
+
+#name{
+	font-family: Microsoft JhengHei;
+	margin-top:2.5%;
+	margin-bottom:2.5%;
+	width:70%;
+	height:20vh;
+	display: inline-block;
+	background-color: #03353E;
+	border-radius: 10px;
+	color:#EEDC6A;
+	font-size: 80px;
+}
+
+#scorebox{
+	width:100%;
+	height:35vh;
+	display: inline-block;
+	color: #04060F;
+}
+
+.add{
+	max-width: 5vw;
+	margin-top: 50%;
+}
+
+.minus{
+	max-width: 5vw;
+	margin-top: 50%;
+}
+
+.scorebar{
+	float: left;
+	width: 33.33%;
+	height: 35vh;
+	line-height: 35vh;
+	display: inline-block; 	
+}
+
+.score{
+	font-family: Microsoft JhengHei;
+	background-color: white;
+	border-radius: 10px;
+	font-size: 18vh;
+	opacity: 0.9;
+}
