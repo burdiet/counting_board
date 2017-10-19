@@ -92,13 +92,13 @@ function setState(timer,state){
 
 function setTimer(e){
   var timerid = e.srcElement.id;
-  timer = document.getElementById(timerid);
+  timer = e.srcElement;
   timer_state = this.getState(timerid);
   switch(timer_state){
     case 0:
       do {
-        var time = parseFloat(window.prompt("please enter time (minutes)"));
-      } while(isNaN(time));
+        var time = parseFloat(window.prompt("please enter time (minutes)","6"));
+      } while(isNaN(time)&&time>0);
       this.setCd(timerid,time*60);
       var mins = Math.floor(time);
       var secs = Math.floor((time*60) % 60);
