@@ -2,12 +2,18 @@
 <html>
 <head> 
 <script type="text/javascript">
-var cdNumber1 = -1;
-var cdNumber2 = -1;
-var timer1,timer2,countdown1,countdown2;
+var cdNumber1 = 0;
+var cdNumber2 = 0;
+var timer1,timer2;
 // idle=0, counting=1, pause=2, ready=3;
 var tAstate = 0,tBstate = 0;
 var scoreA = 0,scoreB = 0;
+var starttime = 0,endtime = 0;
+var longpressed = false,pressing;
+var cd = {
+  tA : null,
+  tB : null,
+};
 
 function convertIntView(number){ 
   if(number>=0 && number <10){
@@ -17,48 +23,25 @@ function convertIntView(number){
   }
 }
 
-function startCount(id,timer,cdNumber){
-  if (id=='tA'){
+function startCount(timer,cdNumber){
     timer.style.backgroundColor = "yellow";
     timer.style.color = "#04060F";
-    countdown1 = setInterval(function(){
+    cd[timer.id] = setInterval(function(){
       cdNumber--;
-      this.setCd(id,cdNumber);
-      var mins = Math.floor(cdNumber / 60);
-      var secs = Math.floor(cdNumber % 60);
-      //console.log(mins , secs);
-      timer.innerHTML = convertIntView(mins)+" : "+ convertIntView(secs);
       if (cdNumber < 0) {
-        this.setState(timerid,0);
-        clearInterval(countdown1);
+        this.reset(timer);
+      }else{
+        this.setCd(timer.id,cdNumber);
+        var mins = Math.floor(cdNumber / 60);
+        var secs = Math.floor(cdNumber % 60);
+        timer.innerHTML = convertIntView(mins)+" : "+ convertIntView(secs);
       }
     },1000);
-  }else if (id=='tB'){
-    timer.style.backgroundColor = "yellow";
-    timer.style.color = "#04060F";
-    countdown2 = setInterval(function(){
-      cdNumber--;
-      this.setCd(id,cdNumber);
-      var mins = Math.floor(cdNumber / 60);
-      var secs = Math.floor(cdNumber % 60);
-      //console.log(mins , secs);
-      timer.innerHTML = convertIntView(mins)+" : "+ convertIntView(secs);
-      if (cdNumber < 0) {
-        this.setState(timerid,0);
-        clearInterval(countdown2);
-      }
-    },1000);    
-  }
 }
 
-function getCountDownId(timer){
-    if (timer=='tA'){
-    return countdown1;
-  }else if (timer=='tB'){
-    return countdown2;
-  }
+function getCountDownId(timerid){
+  return cd[timerid];
 }
-
 
 function getCd(timer){
     if (timer=='tA'){
@@ -93,38 +76,40 @@ function setState(timer,state){
 }
 
 function setTimer(e){
-  var timerid = e.srcElement.id;
-  timer = e.srcElement;
-  timer_state = this.getState(timerid);
-  switch(timer_state){
-    case 0:
-      do {
-        var time = parseFloat(window.prompt("please enter time (minutes)","6"));
-      } while(isNaN(time)&&time>0);
-      this.setCd(timerid,time*60);
-      var mins = Math.floor(time);
-      var secs = Math.floor((time*60) % 60);
-      //console.log(mins , secs);
-      timer.innerHTML = convertIntView(mins)+" : "+ convertIntView(secs);
-      this.setState(timerid,3);
-      break;
-    case 1:
-      //console.log('1');
-      countdownid = this.getCountDownId(timerid);
-      clearInterval(countdownid);
-      //console.log(mins , secs);
-      timer.style.backgroundColor = "#A79493";
-      timer.style.color = "white";
-      this.setState(timerid,2);
-      break;
-    case 2:
-      //console.log('2');
-      this.setState(timerid,1);
-      this.startCount(timerid,timer,this.getCd(timerid));
-      break;
-    case 3:
-      this.setState(timerid,1);
-      this.startCount(timerid,timer,this.getCd(timerid)); 
+  if (!longpressed){
+    var timerid = e.srcElement.id;
+    timer = e.srcElement;
+    timer_state = this.getState(timerid);
+    switch(timer_state){
+      case 0:
+        do {
+          var time = parseFloat(window.prompt("please enter time (minutes)","6"));
+        } while(isNaN(time)||time<=0);
+        this.setCd(timerid,time*60);
+        var mins = Math.floor(time);
+        var secs = Math.floor((time*60) % 60);
+        timer.innerHTML = convertIntView(mins)+" : "+ convertIntView(secs);
+        this.setState(timerid,3);
+        break;
+      case 1:
+        countdownid = this.getCountDownId(timerid);
+        clearInterval(countdownid);
+        timer.style.backgroundColor = "#A79493";
+        timer.style.color = "white";
+        this.setState(timerid,2);
+        break;
+      case 2:
+        this.setState(timerid,1);
+        this.startCount(timer,this.getCd(timerid));
+        break;
+      case 3:
+        this.setState(timerid,1);
+        this.startCount(timer,this.getCd(timerid)); 
+    }
+  }
+  else{
+      e.preventDefault();
+      e.stopImmediatePropagation();
   }
 }
 
@@ -150,14 +135,37 @@ function minus(e){
   }
 }
 
-  function reset(e){
-    var timerid = e.srcElement.id;
-    countdownid = this.getCountDownId(timerid);
-    this.setState(timerid,0);
+  function reset(timer){
+    countdownid = this.getCountDownId(timer.id);
+    this.setState(timer.id,0);
     clearInterval(countdownid);
-    e.srcElement.innerHTML = "06:00";
+    timer.innerHTML = "00 : 00";     
+    timer.style.backgroundColor = "#A79493";
+    timer.style.color = "white";
   }
   
+  function mousedown(e){
+    starttime = new Date().getTime();
+    pressing = setInterval(function(){
+      pressedtime = new Date().getTime();
+      if (pressedtime - starttime > 350){
+        e.srcElement.style.backgroundColor = "#F4F2B1";
+      }
+    },350);
+  }
+
+  function mouseup(e){
+    clearInterval(pressing);
+    endtime = new Date().getTime();
+    var timer = e.srcElement;
+    if (endtime - starttime > 250){
+      longpressed = true;
+      this.reset(timer);
+    }else{
+      longpressed = false;
+    }
+  }
+
 </script>
 <link rel="stylesheet" type="text/css" href="counting_board.css">
 </head> 
@@ -165,7 +173,7 @@ function minus(e){
   <div id='leftside'>
     <div id='name'>紅隊</div>
     <div id='box'>
-      <div id="tA" class="boardbox" onclick="setTimer(event)" ondblclick="reset(event)">00 : 00</div>
+      <div id="tA" class="boardbox" onclick="setTimer(event)" onmousedown="mousedown(event)" onmouseup="mouseup(event)">00 : 00</div>
     </div>
     <div id='scorebox'>
       <div class='scorebar'>
@@ -180,7 +188,7 @@ function minus(e){
   <div id='rightside'>
     <div id='name'>藍隊</div>
     <div id='box'>
-      <div id="tB" class="boardbox" onclick="setTimer(event)" ondblclick="reset(event)">00 : 00</div>
+      <div id="tB" class="boardbox" onclick="setTimer(event)" onmousedown="mousedown(event)" onmouseup="mouseup(event)">00 : 00</div>
     </div>
     <div id='scorebox'>
       <div class='scorebar'>
