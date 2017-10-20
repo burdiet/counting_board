@@ -22,12 +22,12 @@ function startCount(id,timer,cdNumber){
     timer.style.backgroundColor = "yellow";
     timer.style.color = "#04060F";
     countdown1 = setInterval(function(){
+      cdNumber--;
       this.setCd(id,cdNumber);
       var mins = Math.floor(cdNumber / 60);
       var secs = Math.floor(cdNumber % 60);
       //console.log(mins , secs);
       timer.innerHTML = convertIntView(mins)+" : "+ convertIntView(secs);
-      cdNumber--;
       if (cdNumber < 0) {
         this.setState(timerid,0);
         clearInterval(countdown1);
@@ -37,12 +37,12 @@ function startCount(id,timer,cdNumber){
     timer.style.backgroundColor = "yellow";
     timer.style.color = "#04060F";
     countdown2 = setInterval(function(){
+      cdNumber--;
       this.setCd(id,cdNumber);
       var mins = Math.floor(cdNumber / 60);
       var secs = Math.floor(cdNumber % 60);
       //console.log(mins , secs);
       timer.innerHTML = convertIntView(mins)+" : "+ convertIntView(secs);
-      cdNumber--;
       if (cdNumber < 0) {
         this.setState(timerid,0);
         clearInterval(countdown2);
@@ -154,7 +154,7 @@ function minus(e){
     var timerid = e.srcElement.id;
     countdownid = this.getCountDownId(timerid);
     this.setState(timerid,0);
-    clearInterval(countdown);
+    clearInterval(countdownid);
     e.srcElement.innerHTML = "06:00";
   }
   
