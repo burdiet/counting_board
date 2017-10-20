@@ -29,6 +29,7 @@ function startCount(id,timer,cdNumber){
       timer.innerHTML = convertIntView(mins)+" : "+ convertIntView(secs);
       cdNumber--;
       if (cdNumber < 0) {
+        this.setState(timerid,0);
         clearInterval(countdown1);
       }
     },1000);
@@ -43,6 +44,7 @@ function startCount(id,timer,cdNumber){
       timer.innerHTML = convertIntView(mins)+" : "+ convertIntView(secs);
       cdNumber--;
       if (cdNumber < 0) {
+        this.setState(timerid,0);
         clearInterval(countdown2);
       }
     },1000);    
@@ -107,7 +109,7 @@ function setTimer(e){
       this.setState(timerid,3);
       break;
     case 1:
-      console.log('1');
+      //console.log('1');
       countdownid = this.getCountDownId(timerid);
       clearInterval(countdownid);
       //console.log(mins , secs);
@@ -116,7 +118,7 @@ function setTimer(e){
       this.setState(timerid,2);
       break;
     case 2:
-      console.log('2');
+      //console.log('2');
       this.setState(timerid,1);
       this.startCount(timerid,timer,this.getCd(timerid));
       break;
@@ -148,6 +150,14 @@ function minus(e){
   }
 }
 
+  function reset(e){
+    var timerid = e.srcElement.id;
+    countdownid = this.getCountDownId(timerid);
+    this.setState(timerid,0);
+    clearInterval(countdown);
+    timer.innerHTML = "00:00";
+  }
+  
 </script>
 <link rel="stylesheet" type="text/css" href="counting_board.css">
 </head> 
@@ -159,11 +169,11 @@ function minus(e){
     </div>
     <div id='scorebox'>
       <div class='scorebar'>
-        <img id='left' class='minus' src='minus.png' onclick="minus(event);"></img>
+        <img id='left' class='minus' src='minus.png' onclick="minus(event);" ondblclick="reset(event)"></img>
       </div>
       <div id='lscore' class='scorebar score'>0</div>
       <dissv class='scorebar'>
-        <img id='left' class='add' src='add.png' onclick="add(event);"></img>
+        <img id='left' class='add' src='add.png' onclick="add(event);" ondblclick="reset(event)"></img>
       </div>
     </div>
   </div>
