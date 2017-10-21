@@ -1,6 +1,8 @@
 
 <html>
-<head> 
+<head>
+<title>Counting Board</title>
+<link rel="shortcut icon" href="cblogo.ico" /> 
 <script type="text/javascript">
 var cdNumber1 = 0;
 var cdNumber2 = 0;
@@ -148,17 +150,17 @@ function minus(e){
     starttime = new Date().getTime();
     pressing = setInterval(function(){
       pressedtime = new Date().getTime();
-      if (pressedtime - starttime > 350){
+      if (pressedtime - starttime > 150){
         e.srcElement.style.backgroundColor = "#F4F2B1";
       }
-    },350);
+    },80);
   }
 
   function mouseup(e){
     clearInterval(pressing);
     endtime = new Date().getTime();
     var timer = e.srcElement;
-    if (endtime - starttime > 250){
+    if (endtime - starttime > 150){
       longpressed = true;
       this.reset(timer);
     }else{
