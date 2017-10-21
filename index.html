@@ -3,6 +3,39 @@
 <head>
 <title>Counting Board</title>
 <link rel="shortcut icon" href="cblogo.ico" /> 
+<link rel="stylesheet" type="text/css" href="counting_board.css">
+</head> 
+<body>
+  <div id='leftside'>
+    <div id='name'>紅隊</div>
+    <div id='box'>
+      <div id="tA" class="boardbox" onclick="setTimer(event)">00 : 00</div>
+    </div>
+    <div id='scorebox'>
+      <div class='scorebar'>
+        <img id='left' class='minus' src='minus.png' onclick="minus(event)"></img>
+      </div>
+      <div id='lscore' class='scorebar score'>0</div>
+      <dissv class='scorebar'>
+        <img id='left' class='add' src='add.png' onclick="add(event)"></img>
+      </div>
+    </div>
+  </div>
+  <div id='rightside'>
+    <div id='name'>藍隊</div>
+    <div id='box'>
+      <div id="tB" class="boardbox" onclick="setTimer(event)">00 : 00</div>
+    </div>
+    <div id='scorebox'>
+      <div class='scorebar'>
+        <img id='right' class='minus' src='minus.png' onclick="minus(event);"></img>
+      </div>
+      <div id='rscore' class='scorebar score'>0</div>
+      <dissv class='scorebar'>
+        <img id='right' class='add' src='add.png' onclick="add(event);"></img>
+      </div>
+  </div>
+</body>
 <script type="text/javascript">
 var cdNumber1 = 0;
 var cdNumber2 = 0;
@@ -116,9 +149,7 @@ function setTimer(e){
 }
 
 function add(e){
-  console.log(e.srcElement.id)
   if (e.srcElement.id=='left'){
-    console.log('add')
     scoreA+=1;
     document.getElementById('lscore').innerHTML = scoreA;
   }else if(e.srcElement.id=='right'){
@@ -162,44 +193,20 @@ function minus(e){
     var timer = e.srcElement;
     if (endtime - starttime > 150){
       longpressed = true;
-      this.reset(timer);
+      reset(timer);
     }else{
       longpressed = false;
     }
   }
 
-</script>
-<link rel="stylesheet" type="text/css" href="counting_board.css">
-</head> 
-<body>
-  <div id='leftside'>
-    <div id='name'>紅隊</div>
-    <div id='box'>
-      <div id="tA" class="boardbox" onclick="setTimer(event)" onmousedown="mousedown(event)" onmouseup="mouseup(event)">00 : 00</div>
-    </div>
-    <div id='scorebox'>
-      <div class='scorebar'>
-        <img id='left' class='minus' src='minus.png' onclick="minus(event)"></img>
-      </div>
-      <div id='lscore' class='scorebar score'>0</div>
-      <dissv class='scorebar'>
-        <img id='left' class='add' src='add.png' onclick="add(event)"></img>
-      </div>
-    </div>
-  </div>
-  <div id='rightside'>
-    <div id='name'>藍隊</div>
-    <div id='box'>
-      <div id="tB" class="boardbox" onclick="setTimer(event)" onmousedown="mousedown(event)" onmouseup="mouseup(event)">00 : 00</div>
-    </div>
-    <div id='scorebox'>
-      <div class='scorebar'>
-        <img id='right' class='minus' src='minus.png' onclick="minus(event);"></img>
-      </div>
-      <div id='rscore' class='scorebar score'>0</div>
-      <dissv class='scorebar'>
-        <img id='right' class='add' src='add.png' onclick="add(event);"></img>
-      </div>
-  </div>
-</body> 
+['mousedown','touchstart'].forEach(function(e){
+    document.getElementById('tA').addEventListener(e,mousedown);
+    document.getElementById('tB').addEventListener(e,mousedown);
+  });
+['mouseup','touchend'].forEach(function(e){
+    document.getElementById('tA').addEventListener(e,mouseup);
+    document.getElementById('tB').addEventListener(e,mouseup);
+  });
+
+</script> 
 </html>
