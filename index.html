@@ -37,18 +37,14 @@
   </div>
 </body>
 <script type="text/javascript">
-var cdNumber1 = 0;
-var cdNumber2 = 0;
 var timer1,timer2;
-// idle=0, counting=1, pause=2, ready=3;
-var tAstate = 0,tBstate = 0;
-var scoreA = 0,scoreB = 0;
 var starttime = 0,endtime = 0;
 var longpressed = false,pressing;
-var cd = {
-  tA : null,
-  tB : null,
-};
+var cd = { tA : null, tB : null };
+var cdNumber = { tA : 0, tB : 0 };
+//state: idle=0, counting=1, pause=2, ready=3;
+var state = { tA : 0, tB : 0 };
+var score = { left : 0, right: 0 };
 
 function convertIntView(number){ 
   if(number>=0 && number <10){
@@ -79,35 +75,19 @@ function getCountDownId(timerid){
 }
 
 function getCd(timer){
-    if (timer=='tA'){
-    return cdNumber1;
-  }else if (timer=='tB'){
-    return cdNumber2;
-  }
+  return cdNumber[timer];
 }
 
 function setCd(timer,number){
-    if (timer=='tA'){
-    cdNumber1 = number;
-  }else if (timer=='tB'){
-    cdNumber2 = number;
-  }
+  cdNumber[timer] = number;
 }
 
 function getState(timer){
-  if (timer=='tA'){
-    return tAstate;
-  }else if (timer=='tB'){
-    return tBstate;
-  }
+  return this.state[timer];
 }
 
 function setState(timer,state){
-  if (timer=='tA'){
-    tAstate = state;
-  }else if (timer=='tB'){
-    tBstate = state;
-  }
+  this.state[timer] = state;
 }
 
 function setTimer(e){
@@ -141,31 +121,24 @@ function setTimer(e){
         this.setState(timerid,1);
         this.startCount(timer,this.getCd(timerid)); 
     }
-  }
-  else{
+  }else{
       e.preventDefault();
-      e.stopImmediatePropagation();
+      e.stopPropagation();
   }
 }
 
 function add(e){
-  if (e.srcElement.id=='left'){
-    scoreA+=1;
-    document.getElementById('lscore').innerHTML = scoreA;
-  }else if(e.srcElement.id=='right'){
-    scoreB+=1;
-    document.getElementById('rscore').innerHTML = scoreB;
-  }
+  score[e.srcElement.id]+=1;
+  document.getElementById('lscore').innerHTML = score['left'];
+  document.getElementById('rscore').innerHTML = score['right'];
 }
 
 function minus(e){
-  if (e.srcElement.id=='left'&&scoreA>0){
-    scoreA-=1;
-    document.getElementById('lscore').innerHTML = scoreA;
-  }else if(e.srcElement.id=='right'&&scoreB>0){
-    scoreB-=1;
-    document.getElementById('rscore').innerHTML = scoreB;
+  if (score[e.srcElement.id]-1>=0){
+    score[e.srcElement.id]-=1;
   }
+  document.getElementById('lscore').innerHTML = score['left'];
+  document.getElementById('rscore').innerHTML = score['right'];
 }
 
   function reset(timer){
@@ -182,6 +155,7 @@ function minus(e){
     pressing = setInterval(function(){
       pressedtime = new Date().getTime();
       if (pressedtime - starttime > 150){
+        longpressed = true;
         e.srcElement.style.backgroundColor = "#F4F2B1";
       }
     },80);
@@ -208,5 +182,6 @@ function minus(e){
     document.getElementById('tB').addEventListener(e,mouseup);
   });
 
-</script> 
+</script>
+<footer style=><p>Copyright © 2017 burdieT All rights reserved</p></footer>
 </html>
